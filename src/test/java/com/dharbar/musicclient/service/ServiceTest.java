@@ -1,4 +1,4 @@
-package com.dharbar.template.service;
+package com.dharbar.musicclient.service;
 
 import org.junit.jupiter.api.Test;
 

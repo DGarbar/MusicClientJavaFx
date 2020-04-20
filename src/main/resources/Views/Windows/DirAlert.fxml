@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="159.0" prefWidth="552.0"
+  stylesheets="@../CSS/style.css" xmlns="http://javafx.com/javafx/8.0.141"
+  fx:controller="User.Controllers.WindowsControllers.DirConfigController" fx:id="root">
+    <children>
+      <Label AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="139.0"
+        AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="0.0" alignment="CENTER" layoutX="139.0"
+        layoutY="14.0" prefHeight="48.0" prefWidth="346.0" text="Write your path to resources"
+        textAlignment="CENTER" textOverrun="CLIP">
+            <font>
+                <Font name="Arial" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="29.0" layoutY="46.0" prefHeight="27.0" prefWidth="112.0" text="Newest songs: ">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+      <Label layoutX="29.0" layoutY="79.0" prefHeight="27.0" prefWidth="112.0"
+        text="Already chosen: ">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+      <Button defaultButton="true" layoutX="140.0" layoutY="115.0" mnemonicParsing="false"
+        onAction="#writePaths" prefHeight="27.0" prefWidth="163.0" text="OK" fx:id="okBtn"/>
+        <TextField fx:id="purgatoryField" editable="false" layoutX="139.0" layoutY="48.0" prefHeight="25.0" prefWidth="346.0" />
+      <TextField editable="false" layoutX="139.0" layoutY="80.0" prefHeight="25.0" prefWidth="346.0"
+        fx:id="chosenField"/>
+      <Button cancelButton="true" layoutX="311.0" layoutY="115.0" mnemonicParsing="false"
+        onAction="#exit" prefHeight="27.0" prefWidth="174.0" text="Cancel"/>
+        <Button layoutX="492.0" layoutY="47.0" mnemonicParsing="false" onAction="#purgatorySelect" text=". . ." />
+      <Button layoutX="492.0" layoutY="80.0" mnemonicParsing="false" onAction="#chosenSelect"
+        text=". . ."/>
+    </children>
+</AnchorPane>

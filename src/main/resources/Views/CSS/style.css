@@ -1,0 +1,293 @@
+* {
+  /*-color: #a11d44;*/
+  -color: #a11d44;
+  -mbWhite: #efefef;
+  -superBrightGray: #e6e6e6;
+  -brightGray: #dfdfdf;
+  -gray: #d6d6d6;
+  -darkGray: derive(-gray, -20%);
+  -black: #000000;
+}
+
+.root {
+  -fx-background-color: -mbWhite;
+  -fx-fill-width: true;
+  -fx-fill-height: true;
+  /*-fx-font-family: 'Segoe UI';*/
+  /* remove the ugly focus shade */
+  -fx-focus-color: -color;
+  -fx-faint-focus-color: transparent;
+}
+
+#msc-card {
+  -fx-spacing: 6.0;
+  -fx-padding: 10;
+  -fx-hgap: 10;
+  -fx-vgap: 10;
+  -fx-background-color: -mbWhite;
+  -fx-effect: dropshadow(two-pass-box, derive(-color, -40%), 10, 0, 0, 0);
+}
+
+#msc-container {
+  -fx-spacing: 12.0;
+  -fx-padding: 10;
+  -fx-hgap: 10;
+  -fx-vgap: 10;
+}
+
+#msc-panel {
+  -fx-padding: 10;
+}
+
+.tag-container {
+  -fx-alignment: Center;
+  -fx-pref-height: 35;
+  -fx-pref-width: 220;
+  -fx-spacing: 5;
+}
+
+.tag-container .glyph-icon {
+  -fx-font-size: 20px;
+  -glyph-size: 20px;
+}
+
+/*
+ * **********
+ * LABELS
+ * **********
+*/
+.label {
+  -fx-text-fill: -black;
+}
+
+/*
+ * **********
+ * BUTTONS
+ * **********
+ *
+ */
+.button {
+  -fx-background-color: -darkGray,
+  linear-gradient(-gray 50%, white 100%),
+  radial-gradient(center 50% -40%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+  -fx-background-insets: 0, 1, 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
+}
+
+.button:pressed {
+  -fx-background-color: -darkGray,
+  linear-gradient(-darkGray 50%, white 100%),
+  radial-gradient(center 50% -40%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1.0), 10, 0, 0, 0);
+}
+
+.button > .glyph-icon {
+  -fx-fill: linear-gradient(-black 20%, derive(-color, 30%) 85%);
+}
+
+.button > .glyph-icon:hover {
+  -fx-effect: dropshadow(one-pass-box, -black, 1, 0, 0, 0);
+}
+
+.glyph-button {
+  -fx-pref-height: 35px;
+  -fx-background-color: -darkGray,
+  linear-gradient(derive(-color, -60%) 5%, -mbWhite 100%),
+    /*linear-gradient(derive(-color, -60%) 5%, -white 100%),*/
+  radial-gradient(center 50% -40%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+}
+
+.glyph-button:pressed {
+  -fx-background-color: #c3c4c4,
+  linear-gradient(derive(-color, -45%) 20%, -mbWhite 100%),
+    /*linear-gradient(derive(-color, -55%) 40%, white 100%),*/
+  radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230, 230, 230, 0) 50%);
+}
+
+
+.toggle-button {
+  -fx-background-color: -darkGray,
+  linear-gradient(-gray 50%, white 100%),
+  radial-gradient(center 50% -40%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+  -fx-background-insets: 0, 1, 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
+}
+
+.toggle-button:selected {
+  -fx-background-color: -darkGray,
+  linear-gradient(-darkGray 20%, white 100%),
+  radial-gradient(center 50% -20%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+  -fx-effect: innershadow(three-pass-box, derive(-color, 30%), 6, 0, 0, -0.5);
+}
+
+.menu-button {
+  -fx-background-color: -superBrightGray;
+
+}
+.menu-button:showing{
+  -fx-effect:dropshadow(three-pass-box, derive(-color, -30%), 15, 0, 0, -7);
+}
+
+/*
+ * **********
+ * LIST-VIEW
+ * **********
+ *
+ */
+.list-view{
+  -fx-border-color: -mbWhite  ;
+
+  /*-fx-border-width: 3,0,0,3;*/
+}
+
+.msc-list {
+  -fx-selection-bar: -superBrightGray;
+}
+.list-view .scroll-bar .increment-arrow,
+.list-view .scroll-bar .decrement-arrow,
+.list-view .scroll-bar .increment-button,
+.list-view .scroll-bar .decrement-button {
+  -fx-padding:0;
+}
+/*
+ * **********
+ * COMBOBOX
+ * **********
+ *
+ */
+.combo-box {
+  -fx-background-color: -darkGray,
+  linear-gradient(-gray 50%, white 100%),
+  radial-gradient(center 5% -30%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
+  /*-fx-background-insets: 0, 1, 1;*/
+  -fx-effect: dropshadow(three-pass-box, derive(-color, 10%), 2, 0, 1, 1);
+}
+
+/*
+ * **********
+ * TABPANE
+ * **********
+ *
+ */
+.tab-pane > .tab-header-area {
+  -fx-padding: 0, 0, 0, 0;
+  -fx-font-size: 13.0;
+}
+
+.tab-header-area > .tab-header-background {
+  /*-fx-background-color:-black, linear-gradient( -color 20%, white 100%);*/
+  /*-fx-opacity: 0.1;*/
+}
+
+.tab-pane > .tab-content-area {
+  /*-fx-background-color: linear-gradient(  derive(-color, 120%) 0%, -mbWhite 15%);*/
+  -fx-background-color: radial-gradient(center 50% -130%, radius 300%, -color 0%, -mbWhite 50%);
+  -fx-border-color: -gray;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:top {
+  -fx-padding: 4, 4, 4, 4;
+  -fx-focus-color: transparent;
+  -fx-background-color: -darkGray,
+  linear-gradient(-gray 0%, -mbWhite 60%, -superBrightGray 100%);
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
+  -fx-padding: 6, 0, 0, 0;
+  -fx-font-size: 14.0;
+  -fx-background-color: -darkGray,
+  linear-gradient(-gray 50%, white 100%),
+  radial-gradient(center 50% 313%, radius 300%, -color 0%, -mbWhite 80%);
+  /*radial-gradient(center 40% -50%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);*/
+}
+
+/*
+ * **********
+ * CONTROL-BUTTON
+ * **********
+ *
+ */
+.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button {
+  -fx-background-color: transparent;
+  /*-fx-padding: 5;*/
+  /*-fx-background-radius: 0 10 0 10;*/
+  /*-fx-background-color: -darkGray;*/
+}
+
+.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button > .arrow {
+  -fx-background-color: -color;
+  -fx-background-insets: -10 0 -1 -10, 0;
+}
+
+/*
+ * **********
+ * MENU
+ * **********
+ *
+ */
+.menu-bar {
+  -fx-background-color: -brightGray;
+}
+
+/*
+ * **********
+ * Checkbox
+ * **********
+ *
+ */
+.quadruple-tag-container > .check-box {
+  -fx-font-size: 13px;
+  -fx-pref-height: 20px;
+  /*-fx-pref-width: 55px;*/
+}
+
+.double-tag-container > .check-box {
+  -fx-font-size: 15px;
+  -fx-pref-height: 20px;
+  -fx-pref-width: 100px;
+}
+
+.single-tag-container > .check-box {
+  -fx-font-size: 15px;
+  -fx-pref-height: 20px;
+  -fx-pref-width: 110px;
+}
+
+
+
+.check-box > *.box {
+  -fx-background-color: -brightGray;
+}
+
+.check-box:selected > .box > .mark {
+  -fx-background-color: -color;
+}
+
+.check-box:indeterminate > .box > .mark {
+  -fx-background-color: -black;
+}
+
+/*
+ * **********
+ * Cells  Text fields / inputs
+ * **********
+ *
+ */
+.item-cell {
+  -fx-pref-width: 340px;
+  -fx-pref-height: 30px;
+  -fx-spacing: 5;
+}
+
+.item-cell .text-field {
+  -fx-background-color: -darkGray, white, white;
+  -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+
+.hot-glyph-icon {
+  -fx-fill: linear-gradient(-black 20%, derive(-color, 30%) 85%);
+}
+.item-cell .text-field:focused {
+  -fx-background-radius: 0 0 0 0;
+  -fx-background-color: -color, white, white;
+}

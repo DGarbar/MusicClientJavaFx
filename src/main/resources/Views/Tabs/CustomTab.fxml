@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane prefHeight="240.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+
+  <ComboBox fx:id="authorMenu" layoutX="2.0" layoutY="10.0" onAction="#authorClick" prefHeight="30.0" prefWidth="150.0" promptText="Authors" visibleRowCount="15" />
+  <ToggleButton fx:id="showAllBtn" layoutX="260.0" layoutY="30.0" mnemonicParsing="false" onAction="#showAll" prefHeight="15.0" prefWidth="82.0" text="ShowAll">
+    <font>
+      <Font size="11.0" />
+    </font>
+      <graphic>
+         <FontAwesomeIconView glyphName="SEARCH" />
+      </graphic>
+  </ToggleButton>
+  <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutY="52.0"
+    onMouseClicked="#listClick" prefHeight="190.0" prefWidth="358.0" styleClass="msc-list"/>
+</Pane>

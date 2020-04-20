@@ -1,13 +1,13 @@
-package com.dharbar.template;
+package com.dharbar.musicclient;
 
-import org.springframework.boot.SpringApplication;
+import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SuppressWarnings("checkstyle:hideutilityclassconstructor")
 @SpringBootApplication
-public class Application {
+public class ClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        Application.launch(Starter.class, args);
     }
 }

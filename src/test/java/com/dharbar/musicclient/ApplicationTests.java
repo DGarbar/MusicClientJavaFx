@@ -1,4 +1,4 @@
-package com.dharbar.template;
+package com.dharbar.musicclient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.Rating?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="196.0" prefWidth="600.0"
+  stylesheets="@../CSS/style.css" xmlns="http://javafx.com/javafx/8.0.141">
+  <children>
+    <Label layoutX="146.0" layoutY="31.0" prefHeight="30.0" prefWidth="326.0"
+      text="Created by Dmitriy Garbar" textAlignment="CENTER">
+      <font>
+        <Font size="28.0"/>
+      </font>
+    </Label>
+    <Label layoutX="93.0" layoutY="71.0" prefHeight="55.0" prefWidth="433.0"
+      text="Student of the group PS-1401" textAlignment="CENTER">
+      <font>
+        <Font size="32.0"/>
+      </font>
+    </Label>
+    <Rating layoutX="131.0" layoutY="139.0" max="10" prefHeight="33.0" prefWidth="342.0"
+      rating="10.0"/>
+  </children>
+</AnchorPane>
