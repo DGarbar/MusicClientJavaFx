@@ -1,26 +1,21 @@
 package com.dharbar.musicclient.controller.window;
 
-import java.io.File;
+import com.dharbar.musicclient.controller.tab.SimpleTabController;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,8 +24,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MainController {
 
-	private Stage dirAlertStage;
-	private Parent dirAlert;
 	@FXML
 	private VBox root;
 	@FXML
@@ -42,42 +35,29 @@ public class MainController {
 	@FXML
 	private Button playBtn;
 	@FXML
-	private TabPane tabPane;
+	private ListView<String> listView;
 	@FXML
 	private CheckBox bigAttitude, AThink, ASad, ALoud, AHate, canSleep, swing, move, classic;
 	@FXML
 	private TextField authorSearchField;
 
-	private FileChooser fileChooser;
-//	private MscNameDTO currentMsc;
+	private ObservableList<String> listViewItems;
 	private ClipboardContent clipboardContent;
-//	private MainApp mainApp;
-//	private PurgatoryTabManager purgatoryTabManager;
-//	private FixTabManager fixTabManager;
-//	private MscPLayListTabManager mscPLayListTabManager;
-//	private IPlayListTabManager currentTabManager;
+
+	public MainController() {
+	}
 
 	@FXML
 	public void initialize() {
-		clipboardContent = new ClipboardContent();
-
-//		initFileChooser();
-//		initTabManagers();
-//		tabPane.getTabs().add(purgatoryTabManager.getTab());
-//		tabPane.getTabs().add(fixTabManager.getTab());
+		listViewItems = listView.getItems();
+		listViewItems.add("asdasdas");
 	}
 
-	private void initTabManagers() {
-//		UserPreferences userPreferences = UserPreferences.getInstance();
-//		mscPLayListTabManager = new MscPLayListTabManager(this, tabPane, userPreferences);
-//		purgatoryTabManager = new PurgatoryTabManager(this, mscPLayListTabManager, userPreferences);
-//		fixTabManager = new FixTabManager(purgatoryTabManager, userPreferences);
+	@FXML
+	public void listClick() {
+		final String selectedItem = listView.getSelectionModel().getSelectedItem();
+		System.out.println(selectedItem);
 	}
-
-//	private void initFileChooser() {
-//		fileChooser = new FileChooser();
-//		fileChooser.getExtensionFilters().add(new ExtensionFilter("playList", "*.m3u"));
-//	}
 
 //	public void selectNone() {
 //		currentTabManager = null;
@@ -101,18 +81,18 @@ public class MainController {
 
 	@FXML
 	public void showDirAlert() {
-		if (dirAlert == null) {
-			initDirConfig();
-		}
-		if (dirAlertStage == null) {
-			dirAlertStage = new Stage();
-			dirAlertStage.initModality(Modality.WINDOW_MODAL);
-			dirAlertStage.initStyle(StageStyle.DECORATED);
-			dirAlertStage.setResizable(false);
-			dirAlertStage.setScene(new Scene(dirAlert, 570, 170));
-			dirAlertStage.initOwner(root.getScene().getWindow());
-		}
-		dirAlertStage.showAndWait();
+//		if (dirAlert == null) {
+//			initDirConfig();
+//		}
+//		if (dirAlertStage == null) {
+//			dirAlertStage = new Stage();
+//			dirAlertStage.initModality(Modality.WINDOW_MODAL);
+//			dirAlertStage.initStyle(StageStyle.DECORATED);
+//			dirAlertStage.setResizable(false);
+//			dirAlertStage.setScene(new Scene(dirAlert, 570, 170));
+//			dirAlertStage.initOwner(root.getScene().getWindow());
+//		}
+//		dirAlertStage.showAndWait();
 	}
 
 	@FXML
@@ -230,8 +210,8 @@ public class MainController {
 
 	@FXML
 	public void copyTextField() {
-		clipboardContent.putString(textField.getText());
-		Clipboard.getSystemClipboard().setContent(clipboardContent);
+//		clipboardContent.putString(textField.getText());
+//		Clipboard.getSystemClipboard().setContent(clipboardContent);
 	}
 
 

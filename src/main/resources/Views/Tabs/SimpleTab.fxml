@@ -3,6 +3,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.Pane?>
 <Pane prefHeight="240.0" prefWidth="358.0" xmlns="http://javafx.com/javafx/8.0.141"
+  fx:controller="com.dharbar.musicclient.controller.tab.SimpleTabController"
   xmlns:fx="http://javafx.com/fxml/1">
   <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutY="20.0"
     onMouseClicked="#listClick" prefHeight="220.0" prefWidth="358.0" styleClass="msc-list"/>
