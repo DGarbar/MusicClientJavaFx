@@ -183,8 +183,7 @@
                 </HBox>
               </children>
             </VBox>
-            <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutY="20.0"
-              onMouseClicked="#listClick" prefHeight="220.0" prefWidth="358.0" styleClass="msc-list"/>
+            <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutY="20.0" onMouseClicked="#listClick" prefHeight="220.0" prefWidth="358.0" styleClass="msc-list" />
           </children>
           <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

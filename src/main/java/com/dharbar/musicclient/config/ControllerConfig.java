@@ -14,8 +14,4 @@ public class ControllerConfig {
 		return new ClipboardContent();
 	}
 
-	@Bean
-	public MainController mainController(Requester requester){
-		return new MainController(requester);
-	}
 }

@@ -1,6 +1,7 @@
 package com.dharbar.musicclient.controller.window;
 
 import com.dharbar.musicclient.service.requester.Requester;
+import com.dharbar.musicclient.service.requester.dto.Music;
 import java.io.IOException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,19 +10,27 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+@Component
+@FxmlView("/Views/Windows/mainApp.fxml")
 public class MainController {
 
+	private final ClipboardContent clipboardContent;
+	private final Requester requester;
 	@FXML
 	private VBox root;
 	@FXML
@@ -33,30 +42,81 @@ public class MainController {
 	@FXML
 	private Button playBtn;
 	@FXML
-	private ListView<String> listView;
+	private ListView<Music> listView;
 	@FXML
 	private CheckBox bigAttitude, AThink, ASad, ALoud, AHate, canSleep, swing, move, classic;
 	@FXML
 	private ComboBox<String> authorSearch;
+	private Music currentMusic;
+	private MediaPlayer currentMediaPlayer;
 
-	private ObservableList<String> listViewItems;
-	private ClipboardContent clipboardContent;
 
-	private Requester requester;
-
-	public MainController() {
+	public MainController(ClipboardContent clipboardContent, Requester requester) {
+		this.clipboardContent = clipboardContent;
+		this.requester = requester;
 	}
 
 	@FXML
 	public void initialize() {
-		listViewItems = listView.getItems();
-		listViewItems.add("asdasdas");
+		initAuthorSearch();
+		initMusicList();
+	}
+
+	private void initAuthorSearch() {
+		authorSearch.setCellFactory(stringListView -> {
+			ListCell<String> cell = new ListCell<>() {
+				@Override
+				protected void updateItem(String item, boolean empty) {
+					super.updateItem(item, empty);
+					setText(empty ? null : item);
+				}
+			};
+			cell.setOnMousePressed(e -> authorMouseChoose(cell));
+			return cell;
+		});
+	}
+
+	private void authorMouseChoose(ListCell<String> cell) {
+		if (!cell.isEmpty()) {
+			ObservableList<Music> listViewItems = listView.getItems();
+			listViewItems.clear();
+			String text = cell.getText();
+			requester.searchMusic(text)
+				.subscribe(listViewItems::add);
+		}
+	}
+
+	private void initMusicList() {
+		listView.setCellFactory(stringListView -> new ListCell<>() {
+			@Override
+			protected void updateItem(Music item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty
+					? null
+					: String.format("%s - %s", item.getArtist(), item.getSongName()));
+			}
+		});
 	}
 
 	@FXML
 	public void listClick() {
-		final String selectedItem = listView.getSelectionModel().getSelectedItem();
-		System.out.println(selectedItem);
+		Music selectedItem = listView.getSelectionModel().getSelectedItem();
+		selectMusic(selectedItem);
+	}
+
+	private void selectMusic(Music music) {
+		if (!music.equals(currentMusic)) {
+			if (currentMediaPlayer != null) {
+				currentMediaPlayer.stop();
+			}
+			Media media = new Media(music.getFileUrl());
+			MediaPlayer mediaPlayer = new MediaPlayer(media);
+			mediaPlayer.play();
+			mediaPlayer.setVolume(20);
+			currentMediaPlayer = mediaPlayer;
+			currentMusic = music;
+		}
+
 	}
 
 //	public void selectNone() {
@@ -121,8 +181,8 @@ public class MainController {
 		if (StringUtils.isNoneBlank(search)) {
 			ObservableList<String> items = authorSearch.getItems();
 			items.clear();
-			requester.searchArtist(search)
-				.map(items::add);
+			requester.searchArtists(search)
+				.subscribe(items::addAll);
 		}
 	}
 
