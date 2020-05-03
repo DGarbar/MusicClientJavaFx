@@ -4,21 +4,21 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.Resource;
 
 @Configuration
 public class SceneConfig {
-	@Value("classpath:/Views/Windows/mainApp.fxml") Resource mainStageResource;
-	@Value("classpath:/Views/Tabs/SimpleTab.fxml") Resource simpleTabResource;
-	@Value("classpath:/Views/Cells/SimpleCell.fxml") Resource simpleCellResource;
+
+	@Value("classpath:/Views/Windows/mainApp.fxml")
+	Resource mainStageResource;
+	@Value("classpath:/Views/Tabs/SimpleTab.fxml")
+	Resource simpleTabResource;
+	@Value("classpath:/Views/Cells/SimpleCell.fxml")
+	Resource simpleCellResource;
 
 	@Bean
 	public FXMLLoader fxmlLoader(ApplicationContext applicationContext) {

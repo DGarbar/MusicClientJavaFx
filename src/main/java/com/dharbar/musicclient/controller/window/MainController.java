@@ -1,6 +1,6 @@
 package com.dharbar.musicclient.controller.window;
 
-import com.dharbar.musicclient.controller.tab.SimpleTabController;
+import com.dharbar.musicclient.service.requester.Requester;
 import java.io.IOException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,20 +8,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-@Component
 public class MainController {
 
 	@FXML
@@ -29,7 +27,7 @@ public class MainController {
 	@FXML
 	private Menu playListMenu;
 	@FXML
-	private TextField textField;
+	private TextField musicField;
 	@FXML
 	private Button addBtn;
 	@FXML
@@ -39,10 +37,12 @@ public class MainController {
 	@FXML
 	private CheckBox bigAttitude, AThink, ASad, ALoud, AHate, canSleep, swing, move, classic;
 	@FXML
-	private TextField authorSearchField;
+	private ComboBox<String> authorSearch;
 
 	private ObservableList<String> listViewItems;
 	private ClipboardContent clipboardContent;
+
+	private Requester requester;
 
 	public MainController() {
 	}
@@ -116,21 +116,14 @@ public class MainController {
 //	}
 
 	@FXML
-	public void createAuthorTab() {
-//		String name = authorSearchField.getText();
-//		if (name != null && !Objects.equals(name, "")) {
-//			if (name.matches(UserPropertyUtil.AUTHOR_REGEX)) {
-//				Tab tab = mscPLayListTabManager.getTab(name);
-//				if (tab != null) {
-//					tabPane.getTabs().add(tab);
-//					Notificator.tabCreate(name);
-//				}
-//			} else {
-//				Notificator.nameWarning(name);
-//				authorSearchField.requestFocus();
-//				authorSearchField.setText("LOL");
-//			}
-//		}
+	public void searchAuthor() {
+		String search = authorSearch.getEditor().getText();
+		if (StringUtils.isNoneBlank(search)) {
+			ObservableList<String> items = authorSearch.getItems();
+			items.clear();
+			requester.searchArtist(search)
+				.map(items::add);
+		}
 	}
 
 	@FXML

@@ -1,19 +1,7 @@
 package com.dharbar.musicclient.controller.tab;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.Pane;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Component;
 
 public class SimpleTabController {
 

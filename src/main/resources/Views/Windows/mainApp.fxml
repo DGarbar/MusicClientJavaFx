@@ -4,6 +4,7 @@
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -39,7 +40,7 @@
       <children>
         <HBox id="msc-container" layoutX="4.0" layoutY="14.0" prefHeight="55.0" prefWidth="640.0">
           <children>
-            <TextField fx:id="textField" alignment="CENTER" editable="false" onMouseReleased="#copyTextField" pickOnBounds="false" prefHeight="35.0" prefWidth="440.0" promptText="Author - Music Name">
+            <TextField fx:id="musicField" alignment="CENTER" editable="false" onMouseReleased="#copyTextField" pickOnBounds="false" prefHeight="35.0" prefWidth="440.0" promptText="Author - Music Name">
               <font>
                 <Font name="Arial" size="16.0" />
               </font>
@@ -60,15 +61,12 @@
           <children>
             <HBox id="msc-panel" layoutX="388.0" prefHeight="36.0" prefWidth="243.0">
               <children>
-                <TextField fx:id="authorSearchField" alignment="CENTER" prefHeight="32.0" prefWidth="192.0" promptText="Select name">
-                  <font>
-                    <Font size="14.0" />
-                  </font>
-                  <HBox.margin>
-                    <Insets right="10.0" />
-                  </HBox.margin>
-                </TextField>
-                <Button mnemonicParsing="false" onAction="#createAuthorTab" prefHeight="32.0" prefWidth="32.0" styleClass="glyph-button">
+                        <ComboBox fx:id="authorSearch" editable="true" prefHeight="26.0" prefWidth="166.0" promptText="Author search">
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                <Button mnemonicParsing="false" onAction="#searchAuthor" prefHeight="32.0" prefWidth="32.0" styleClass="glyph-button">
                   <font>
                     <Font size="6.0" />
                   </font>
