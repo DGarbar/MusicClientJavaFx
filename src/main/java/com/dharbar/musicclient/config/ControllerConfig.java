@@ -1,7 +1,5 @@
 package com.dharbar.musicclient.config;
 
-import com.dharbar.musicclient.controller.window.MainController;
-import com.dharbar.musicclient.service.requester.Requester;
 import javafx.scene.input.ClipboardContent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

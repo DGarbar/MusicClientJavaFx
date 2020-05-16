@@ -15,6 +15,8 @@ public class SceneConfig {
 		Parent parent = fxWeaver.loadView(MainController.class);
 		return new Scene(parent, 640, 390);
 	}
+
+
 //
 //	@Bean
 //	@Scope("prototype")

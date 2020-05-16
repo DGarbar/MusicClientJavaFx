@@ -1,8 +1,16 @@
 package com.dharbar.musicclient.controller.window;
 
+import com.dharbar.musicclient.controller.window.dto.Genre;
+import com.dharbar.musicclient.controller.window.dto.Mood;
+import com.dharbar.musicclient.service.mediaplayer.MediaPlayerService;
 import com.dharbar.musicclient.service.requester.Requester;
 import com.dharbar.musicclient.service.requester.dto.Music;
+import com.dharbar.musicclient.service.requester.dto.MusicAttributes;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,22 +21,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.controlsfx.control.CheckComboBox;
 import org.springframework.stereotype.Component;
 
 @Component
 @FxmlView("/Views/Windows/mainApp.fxml")
 public class MainController {
 
+	private final MediaPlayerService mediaPlayerService;
 	private final ClipboardContent clipboardContent;
 	private final Requester requester;
 	@FXML
@@ -38,7 +49,7 @@ public class MainController {
 	@FXML
 	private TextField musicField;
 	@FXML
-	private Button addBtn;
+	private Button nextBtn;
 	@FXML
 	private Button playBtn;
 	@FXML
@@ -46,20 +57,33 @@ public class MainController {
 	@FXML
 	private CheckBox bigAttitude, AThink, ASad, ALoud, AHate, canSleep, swing, move, classic;
 	@FXML
+	private CheckComboBox<Mood> moodCheckComboBox;
+	@FXML
+	private CheckComboBox<Genre> genreCheckComboBox;
+	@FXML
 	private ComboBox<String> authorSearch;
-	private Music currentMusic;
-	private MediaPlayer currentMediaPlayer;
+	@FXML
+	private TextArea authorSearchTextArea;
 
-
-	public MainController(ClipboardContent clipboardContent, Requester requester) {
+	public MainController(
+		MediaPlayerService mediaPlayerService,
+		ClipboardContent clipboardContent, Requester requester) {
+		this.mediaPlayerService = mediaPlayerService;
 		this.clipboardContent = clipboardContent;
 		this.requester = requester;
+
+//		Media media = new Media("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+//		MediaPlayer mediaPlayer = new MediaPlayer(media);
+//		mediaPlayer.play();
+//		mediaPlayer.setVolume(20);
 	}
 
 	@FXML
 	public void initialize() {
 		initAuthorSearch();
 		initMusicList();
+		initGenreComboBox();
+		initMoodComboBox();
 	}
 
 	private void initAuthorSearch() {
@@ -82,11 +106,14 @@ public class MainController {
 			listViewItems.clear();
 			String text = cell.getText();
 			requester.searchMusic(text)
-				.subscribe(listViewItems::add);
+				.doOnNext(listViewItems::add)
+				.subscribe();
 		}
 	}
 
 	private void initMusicList() {
+		mediaPlayerService.setPlayListAndPlay(listView.getItems(), this::chooseMusic);
+
 		listView.setCellFactory(stringListView -> new ListCell<>() {
 			@Override
 			protected void updateItem(Music item, boolean empty) {
@@ -98,77 +125,38 @@ public class MainController {
 		});
 	}
 
+	private void initMoodComboBox() {
+		moodCheckComboBox.getItems().addAll(Mood.values());
+	}
+
+	private void initGenreComboBox() {
+		genreCheckComboBox.getItems().addAll(Genre.values());
+	}
+
 	@FXML
 	public void listClick() {
 		Music selectedItem = listView.getSelectionModel().getSelectedItem();
-		selectMusic(selectedItem);
+
+		mediaPlayerService.play(selectedItem, this::chooseMusic);
+		playBtn.setText("PAUSE");
 	}
 
-	private void selectMusic(Music music) {
-		if (!music.equals(currentMusic)) {
-			if (currentMediaPlayer != null) {
-				currentMediaPlayer.stop();
-			}
-			Media media = new Media(music.getFileUrl());
-			MediaPlayer mediaPlayer = new MediaPlayer(media);
-			mediaPlayer.play();
-			mediaPlayer.setVolume(20);
-			currentMediaPlayer = mediaPlayer;
-			currentMusic = music;
-		}
+	private void chooseMusic(Music music) {
+		musicField.textProperty()
+			.setValue(String.format("%s - %s", music.getArtist(), music.getSongName()));
 
-	}
-
-//	public void selectNone() {
-//		currentTabManager = null;
-//		currentMsc = null;
-//		addBtn.setDisable(true);
-//		playBtn.setDisable(true);
-//		authorSearchField.setText(null);
-//		textField.clear();
-//		setEmptyTags();
-//	}
-
-//	public void selectMsc(MscNameDTO mscNameDTO, IPlayListTabManager playListTabManager) {
-//		addBtn.setDisable(false);
-//		playBtn.setDisable(!mscNameDTO.getExist());
-//		textField.setText(mscNameDTO.toString());
-//		textField.end();
-//		currentTabManager = playListTabManager;
-//		currentMsc = mscNameDTO;
-//		writeTagsFromMscName(mscNameDTO);
-//	}
-
-	@FXML
-	public void showDirAlert() {
-//		if (dirAlert == null) {
-//			initDirConfig();
-//		}
-//		if (dirAlertStage == null) {
-//			dirAlertStage = new Stage();
-//			dirAlertStage.initModality(Modality.WINDOW_MODAL);
-//			dirAlertStage.initStyle(StageStyle.DECORATED);
-//			dirAlertStage.setResizable(false);
-//			dirAlertStage.setScene(new Scene(dirAlert, 570, 170));
-//			dirAlertStage.initOwner(root.getScene().getWindow());
-//		}
-//		dirAlertStage.showAndWait();
-	}
-
-	@FXML
-	public void showAudioChooser() {
-//		mainApp.showAudioChooser();
+		listView.getSelectionModel().select(music);
 	}
 
 	@FXML
 	public void play() {
-//		if (currentMsc != null) {
-//			try {
-//				mainApp.getAudioPlayer().play(currentMsc);
-//			} catch (IOException e) {
-//				showAudioChooser();
-//			}
-//		}
+		if (mediaPlayerService.isPlaying()) {
+			mediaPlayerService.pause();
+			playBtn.setText("PLAY");
+		} else {
+			mediaPlayerService.play();
+			playBtn.setText("PAUSE");
+		}
 	}
 
 //	public void setMainApp(MainApp mainApp) {
@@ -182,12 +170,35 @@ public class MainController {
 			ObservableList<String> items = authorSearch.getItems();
 			items.clear();
 			requester.searchArtists(search)
-				.subscribe(items::addAll);
+				.doOnNext(items::addAll)
+				.subscribe();
 		}
 	}
 
 	@FXML
-	public void createPlayListTab() {
+	public void searchAttributes() {
+		String text = authorSearchTextArea.getText();
+		List<String> artists = Arrays.asList(StringUtils.stripToEmpty(text).split(", "));
+		List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems().stream()
+			.map(Enum::toString)
+			.collect(Collectors.toList());
+		List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems().stream()
+			.map(Enum::toString)
+			.collect(Collectors.toList());
+
+		if (!(CollectionUtils.isEmpty(artists) && CollectionUtils.isEmpty(tags) && CollectionUtils
+			.isEmpty(genres))) {
+			ObservableList<Music> listViewItems = listView.getItems();
+			listViewItems.clear();
+			requester.searchByAttributes(MusicAttributes.of(artists, genres, tags))
+				.doOnNext(listViewItems::add)
+				.subscribe();
+		}
+	}
+
+	// TODO
+//	@FXML
+//	public void createPlayListTab() {
 //		String name = authorSearchField.getText();
 //		if (name != null && !Objects.equals(name, "")) {
 //			MscNameDTO template = writeMscNameTags(new MscNameDTO(null, null));
@@ -199,87 +210,17 @@ public class MainController {
 //		} else {
 //			Notificator.nameWarning(name);
 //		}
-	}
-
-	@FXML
-	private void updateMscName() {
-//		if (currentMsc != null) {
-//			currentTabManager.update(writeMscNameTags(currentMsc));
-//		}
-	}
-
-	@FXML
-	private void removeMsc() {
-//		if (currentMsc != null) {
-//			currentTabManager.remove(currentMsc);
-//		}
-	}
-
-	@FXML
-	public void createPlayList() {
-//		if (fileChooser == null) {
-//			initFileChooser();
-//		}
-//		Tab tab = tabPane.getSelectionModel().getSelectedItem();
-//		if (tab != null) {
-//			if (!tab.getText().equals("Fix")) {
-//				File file = fileChooser.showSaveDialog(root.getScene().getWindow());
-//				if (file != null) {
-//					boolean inPurgatory = tab.getText().equals("Purgatory");
-//					Path path = file.toPath();
-//					List<String> list = mscPLayListTabManager.getMscListByTabName(tab.getText());
-//					M3UService.createPlayList(path, list, inPurgatory);
-//				}
-//			}
-//		}
-	}
-
-	@FXML
-	public void addToPlayList() {
-//		if (currentMsc != null && !currentMsc.getInPurgatory()) {
-//			if (fileChooser == null) {
-//				initFileChooser();
-//			}
-//			File file = fileChooser.showOpenDialog(root.getScene().getWindow());
-//			if (file != null) {
-//				Path path = file.toPath();
-//				M3UService.addToPlayList(path, currentMsc.toString());
-//				addPlayListMenu(path.getName(path.getNameCount() - 1).toString(), path);
-//			}
-//		}
-	}
-//
-//	private void addPlayListMenu(String name, Path listPath) {
-//		if (playListMenu.getItems().stream().noneMatch(menuItem -> menuItem.getText().equals(name))) {
-//			MenuItem menuItem = new MenuItem(name);
-//			menuItem.setOnAction(event -> {
-//				if (currentMsc != null && !currentMsc.getInPurgatory()) {
-//					M3UService.addToPlayList(listPath, currentMsc.toString());
-//				}
-//			});
-//			playListMenu.getItems().add(menuItem);
-//		}
 //	}
 
 	@FXML
-	public void copyTextField() {
-//		clipboardContent.putString(textField.getText());
-//		Clipboard.getSystemClipboard().setContent(clipboardContent);
+	private void nextMsc() {
+		mediaPlayerService.next(this::chooseMusic);
 	}
 
-
-	private void initDirConfig() {
-//		try {
-//			FXMLLoader fxmlLoader = new FXMLLoader();
-//			fxmlLoader.setLocation(getClass().getResource("/Views/Windows/DirAlert.fxml"));
-//			dirAlert = fxmlLoader.load();
-//			((DirConfigController) fxmlLoader.getController()).setChangePurgatoryListener(() -> {
-//				fixTabManager.updateFix();
-//				purgatoryTabManager.updatePurgatory();
-//			});
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+	@FXML
+	public void copyTextField() {
+		clipboardContent.putString(musicField.getText());
+		Clipboard.getSystemClipboard().setContent(clipboardContent);
 	}
 
 	@FXML
@@ -298,42 +239,4 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
-
-//	private MscNameDTO writeMscNameTags(MscNameDTO mscNameDTO) {
-//		mscNameDTO.setBigAttitude(bigAttitude.isSelected());
-//		mscNameDTO.setAThink(AThink.isSelected());
-//		mscNameDTO.setASad(ASad.isSelected());
-//		mscNameDTO.setALoud(ALoud.isSelected());
-//		mscNameDTO.setAHate(AHate.isSelected());
-//		mscNameDTO.setCanSleep(canSleep.isSelected());
-//		mscNameDTO.setSwing(swing.isSelected());
-//		mscNameDTO.setMove(move.isSelected());
-//		mscNameDTO.setClassic(classic.isSelected());
-//		return mscNameDTO;
-//	}
-//
-//	private void writeTagsFromMscName(MscNameDTO mscNameDTO) {
-//		bigAttitude.setSelected(mscNameDTO.getBigAttitude());
-//		AThink.setSelected(mscNameDTO.getAThink());
-//		ASad.setSelected(mscNameDTO.getASad());
-//		ALoud.setSelected(mscNameDTO.getALoud());
-//		AHate.setSelected(mscNameDTO.getAHate());
-//		canSleep.setSelected(mscNameDTO.getCanSleep());
-//		swing.setSelected(mscNameDTO.getSwing());
-//		move.setSelected(mscNameDTO.getMove());
-//		classic.setSelected(mscNameDTO.getClassic());
-//	}
-//
-//	private void setEmptyTags() {
-//		bigAttitude.setSelected(false);
-//		AThink.setSelected(false);
-//		ASad.setSelected(false);
-//		ALoud.setSelected(false);
-//		AHate.setSelected(false);
-//		canSleep.setSelected(false);
-//		swing.setSelected(false);
-//		move.setSelected(false);
-//		classic.setSelected(false);
-//	}
-
 }
