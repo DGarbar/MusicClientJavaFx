@@ -6,11 +6,12 @@ import com.dharbar.musicclient.service.mediaplayer.MediaPlayerService;
 import com.dharbar.musicclient.service.requester.Requester;
 import com.dharbar.musicclient.service.requester.dto.Music;
 import com.dharbar.musicclient.service.requester.dto.MusicAttributes;
+import com.dharbar.musicclient.service.subscriber.MusicSubscriber;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,14 +35,17 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.CheckComboBox;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
 @Component
 @FxmlView("/Views/Windows/mainApp.fxml")
 public class MainController {
 
-	private final MediaPlayerService mediaPlayerService;
 	private final ClipboardContent clipboardContent;
 	private final Requester requester;
+	private MusicSubscriber currentListSubscription;
+	private MediaPlayerService mediaPlayerService;
+
 	@FXML
 	private VBox root;
 	@FXML
@@ -66,9 +70,7 @@ public class MainController {
 	private TextArea authorSearchTextArea;
 
 	public MainController(
-		MediaPlayerService mediaPlayerService,
 		ClipboardContent clipboardContent, Requester requester) {
-		this.mediaPlayerService = mediaPlayerService;
 		this.clipboardContent = clipboardContent;
 		this.requester = requester;
 
@@ -80,6 +82,7 @@ public class MainController {
 
 	@FXML
 	public void initialize() {
+		initMediaPlayerService();
 		initAuthorSearch();
 		initMusicList();
 		initGenreComboBox();
@@ -105,14 +108,14 @@ public class MainController {
 			ObservableList<Music> listViewItems = listView.getItems();
 			listViewItems.clear();
 			String text = cell.getText();
-			requester.searchMusic(text)
-				.doOnNext(listViewItems::add)
-				.subscribe();
+			Flux<Music> musicFlux = requester.searchMusic(text);
+
+			subscribeAndFullList(musicFlux, listViewItems::add);
 		}
 	}
 
 	private void initMusicList() {
-		mediaPlayerService.setPlayListAndPlay(listView.getItems(), this::chooseMusic);
+		mediaPlayerService.setPlayListAndPlay(listView.getItems());
 
 		listView.setCellFactory(stringListView -> new ListCell<>() {
 			@Override
@@ -133,11 +136,15 @@ public class MainController {
 		genreCheckComboBox.getItems().addAll(Genre.values());
 	}
 
+	private void initMediaPlayerService() {
+		mediaPlayerService = new MediaPlayerService(this::chooseMusic, this::loadMore);
+	}
+
 	@FXML
 	public void listClick() {
 		Music selectedItem = listView.getSelectionModel().getSelectedItem();
 
-		mediaPlayerService.play(selectedItem, this::chooseMusic);
+		mediaPlayerService.play(selectedItem );
 		playBtn.setText("PAUSE");
 	}
 
@@ -190,9 +197,25 @@ public class MainController {
 			.isEmpty(genres))) {
 			ObservableList<Music> listViewItems = listView.getItems();
 			listViewItems.clear();
-			requester.searchByAttributes(MusicAttributes.of(artists, genres, tags))
-				.doOnNext(listViewItems::add)
-				.subscribe();
+			Flux<Music> musicFlux = requester
+				.searchByAttributes(MusicAttributes.of(artists, genres, tags));
+
+			subscribeAndFullList(musicFlux, listViewItems::add);
+		}
+	}
+
+	private void subscribeAndFullList(Flux<Music> musicFlux, Consumer<Music> onNext) {
+		if (currentListSubscription != null) {
+			currentListSubscription.cancel();
+		}
+		currentListSubscription = new MusicSubscriber(onNext);
+		musicFlux.subscribe(currentListSubscription);
+	}
+
+	@FXML
+	public void loadMore() {
+		if (currentListSubscription != null) {
+			currentListSubscription.req();
 		}
 	}
 
@@ -214,7 +237,7 @@ public class MainController {
 
 	@FXML
 	private void nextMsc() {
-		mediaPlayerService.next(this::chooseMusic);
+		mediaPlayerService.next();
 	}
 
 	@FXML

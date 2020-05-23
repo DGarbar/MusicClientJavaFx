@@ -6,29 +6,35 @@ import java.util.function.Consumer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.util.Duration;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Service;
 
-@Service
 public class MediaPlayerService {
 
 	private MediaPlayer currentMediaPlayer;
 	private Music currentMusic;
 	private List<Music> currentPlayList;
+	private Consumer<Music> onNext;
+	private Runnable onLast;
 
-	public void setPlayListAndPlay(List<Music> musics, Consumer<Music> onNext) {
+	public MediaPlayerService(Consumer<Music> onNext, Runnable onLast) {
+		this.onNext = onNext;
+		this.onLast = onLast;
+	}
+
+	public void setPlayListAndPlay(List<Music> musics) {
 		currentPlayList = musics;
 		if (CollectionUtils.isNotEmpty(musics)) {
-			setupNext(currentPlayList.get(0), onNext);
+			setupNext(currentPlayList.get(0));
 		}
 	}
 
-	public void play(Music music, Consumer<Music> onNext) {
-		setMusic(music, onNext);
+	public void play(Music music) {
+		setMusic(music);
 		play();
 	}
 
-	private void setMusic(Music music, Consumer<Music> onNext) {
+	private void setMusic(Music music) {
 		Media media = new Media(music.getFileUrl());
 		currentMusic = music;
 		if (currentMediaPlayer != null) {
@@ -38,18 +44,25 @@ public class MediaPlayerService {
 
 		MediaPlayer mediaPlayer = new MediaPlayer(media);
 		mediaPlayer.setVolume(20);
-		mediaPlayer.setOnEndOfMedia(() -> setupNext(music, onNext));
+		mediaPlayer.setOnEndOfMedia(() -> setupNext(music));
+
+		mediaPlayer.seek(Duration.seconds(10));
 
 		onNext.accept(music);
 		currentMediaPlayer = mediaPlayer;
 		play();
 	}
 
-
-	private void setupNext(Music music, Consumer<Music> onNext) {
+	private void setupNext(Music music) {
 		int i = CollectionUtils.isEmpty(currentPlayList) ? -1 : currentPlayList.indexOf(music);
-		if (i != -1 && currentPlayList.size() != i + 1) {
-			setMusic(currentPlayList.get(i + 1), onNext);
+		boolean isThisTheLastSong = currentPlayList.size() == i + 1;
+		boolean isAnySongs = i != -1;
+		if (isAnySongs && !isThisTheLastSong) {
+			setMusic(currentPlayList.get(i + 1));
+		}
+
+		if (currentPlayList.size() == i + 2 || currentPlayList.size() == i + 1) {
+			onLast.run();
 		}
 	}
 
@@ -69,9 +82,9 @@ public class MediaPlayerService {
 		return currentMediaPlayer != null && currentMediaPlayer.getStatus().equals(Status.PLAYING);
 	}
 
-	public void next(Consumer<Music> onNext) {
+	public void next() {
 		if (currentMediaPlayer != null && currentMusic != null) {
-			setupNext(currentMusic, onNext);
+			setupNext(currentMusic);
 		}
 		play();
 	}

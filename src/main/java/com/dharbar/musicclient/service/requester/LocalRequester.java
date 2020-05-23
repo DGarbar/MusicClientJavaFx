@@ -33,11 +33,25 @@ public class LocalRequester implements Requester {
 				.fileUrl(
 					"https://audio-ssl.itunes.apple.com/itunes-assets/Music/30/00/67/mzm.pdnjufij.aac.p.m4a")
 				.genres(List.of("testGenre2"))
+				.build(),
+			Music.builder()
+				.artist("test")
+				.songName("songNameTest")
+				.fileUrl(
+					"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/c0/5c/4a/c05c4ab6-84dc-f2f0-70a8-3640d577cf07/mzaf_3410420486333941121.plus.aac.p.m4a")
+				.genres(List.of("testGenre1", "testGenre2"))
+				.build(),
+			Music.builder()
+				.artist("test")
+				.songName("songNameTest")
+				.fileUrl(
+					"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/c0/5c/4a/c05c4ab6-84dc-f2f0-70a8-3640d577cf07/mzaf_3410420486333941121.plus.aac.p.m4a")
+				.genres(List.of("testGenre1", "testGenre2"))
 				.build());
 	}
 
 	@Override
-	public Flux<Music> searchByAttributes(MusicAttributes musicAttributes){
+	public Flux<Music> searchByAttributes(MusicAttributes musicAttributes) {
 		return Flux.just(
 			Music.builder()
 				.artist("test111111")
@@ -52,6 +66,27 @@ public class LocalRequester implements Requester {
 				.fileUrl(
 					"https://audio-ssl.itunes.apple.com/itunes-assets/Music/30/00/67/mzm.pdnjufij.aac.p.m4a")
 				.genres(List.of("testGenre21221313123"))
+				.build(),
+			Music.builder()
+				.artist("test111111")
+				.songName("songName11111111Test")
+				.fileUrl(
+					"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/c0/5c/4a/c05c4ab6-84dc-f2f0-70a8-3640d577cf07/mzaf_3410420486333941121.plus.aac.p.m4a")
+				.genres(List.of("testGenre11111", "testGenre2111"))
+				.build(),
+			Music.builder()
+				.artist("test111111")
+				.songName("songName11111111Test")
+				.fileUrl(
+					"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/c0/5c/4a/c05c4ab6-84dc-f2f0-70a8-3640d577cf07/mzaf_3410420486333941121.plus.aac.p.m4a")
+				.genres(List.of("testGenre11111", "testGenre2111"))
+				.build(),
+			Music.builder()
+				.artist("test111111")
+				.songName("songName11111111Test")
+				.fileUrl(
+					"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/c0/5c/4a/c05c4ab6-84dc-f2f0-70a8-3640d577cf07/mzaf_3410420486333941121.plus.aac.p.m4a")
+				.genres(List.of("testGenre11111", "testGenre2111"))
 				.build());
 	}
 
