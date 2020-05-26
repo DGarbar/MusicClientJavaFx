@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.extern.slf4j.Slf4j;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,7 @@ import org.controlsfx.control.CheckComboBox;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
+@Slf4j
 @Component
 @FxmlView("/Views/Windows/mainApp.fxml")
 public class MainController {
@@ -168,6 +170,29 @@ public class MainController {
 			items.clear();
 			requester.searchArtists(search)
 				.doOnNext(items::addAll)
+				.subscribe();
+		}
+	}
+
+	@FXML
+	public void updateAttributes() {
+		Music currentMusic = mediaPlayerService.getCurrentMusic();
+		if (currentMusic != null) {
+			List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems().stream()
+				.map(Genre::getNormal)
+				.collect(Collectors.toList());
+
+			List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems().stream()
+				.map(Mood::getNormal)
+				.collect(Collectors.toList());
+
+			Music updatedMusic = currentMusic.toBuilder()
+				.tags(tags)
+				.genres(genres)
+				.build();
+
+			requester.updateMusic(updatedMusic)
+				.doOnError(throwable -> log.error(throwable.getMessage(), throwable))
 				.subscribe();
 		}
 	}

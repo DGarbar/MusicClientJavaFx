@@ -8,9 +8,10 @@ import lombok.Value;
 @Value
 public class Music {
 
-	private String artist;
-	private String songName;
-	private String fileUrl;
-	private Long trackTimeMillis;
-	private List<String> genres;
+	String artist;
+	String songName;
+	String fileUrl;
+	Long trackTimeMillis;
+	List<String> genres;
+	List<String> tags;
 }

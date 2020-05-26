@@ -91,6 +91,12 @@ public class LocalRequester implements Requester {
 	}
 
 	@Override
+	public Mono<String> updateMusic(Music music) {
+		return Mono.just("norm");
+
+	}
+
+	@Override
 	public Mono<List<String>> searchArtists(String artist) {
 		return Mono.just(List.of("test1", "test2", "test3"));
 	}

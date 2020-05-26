@@ -13,4 +13,6 @@ public interface Requester {
 	Mono<List<String>> searchArtists(String artist);
 
 	Flux<Music> searchByAttributes(MusicAttributes musicAttributes);
+
+	Mono<String> updateMusic(Music music);
 }

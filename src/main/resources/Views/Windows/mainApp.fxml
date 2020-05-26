@@ -95,15 +95,36 @@
                     <Insets />
                   </VBox.margin>
                            <children>
-                              <CheckComboBox fx:id="genreCheckComboBox" prefHeight="26.0" prefWidth="106.0" title="Genre" />
-                              <CheckComboBox fx:id="moodCheckComboBox" prefHeight="26.0" prefWidth="108.0" title="Mood" />
+                              <CheckComboBox fx:id="genreCheckComboBox" prefHeight="26.0" prefWidth="86.0" title="Genre">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin></CheckComboBox>
+                              <CheckComboBox fx:id="moodCheckComboBox" prefHeight="26.0" prefWidth="86.0" title="Mood">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin></CheckComboBox>
                            </children>
                 </HBox>
-                        <Button mnemonicParsing="false" onAction="#searchAttributes" prefHeight="22.0" prefWidth="227.0" styleClass="glyph-button" text="">
-                          <graphic>
-                            <Glyph fontFamily="FontAwesome" icon="SEARCH" styleClass="glyph-icon" />
-                          </graphic>
-                        </Button>
+                        <HBox prefHeight="46.0" prefWidth="222.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#searchAttributes" prefHeight="30.0" prefWidth="80.0" styleClass="glyph-button" text="">
+                                <graphic>
+                                  <Glyph fontFamily="FontAwesome" icon="SEARCH" styleClass="glyph-icon" />
+                                </graphic>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="12.0" right="20.0" top="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#updateAttributes" prefHeight="30.0" prefWidth="80.0" styleClass="glyph-button" text="">
+                                 <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="PENCIL" styleClass="glyph-icon" />
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="17.0" right="3.0" top="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
 <!--                        <CheckComboBox prefWidth="150.0"  />-->
               </children>
             </VBox>

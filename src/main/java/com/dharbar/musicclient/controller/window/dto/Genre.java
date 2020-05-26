@@ -21,9 +21,13 @@ public enum Genre {
 	SINGER_SONGWRITER("Singer/Songwriter"),
 	SOUNDTRACK("Soundtrack");
 
-	private String value;
+	private String normal;
 
-	Genre(String value) {
-		this.value = value;
+	Genre(String normal) {
+		this.normal = normal;
+	}
+
+	public String getNormal() {
+		return normal;
 	}
 }

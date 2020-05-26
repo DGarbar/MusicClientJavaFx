@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,6 +54,16 @@ public class ServerRequester implements Requester {
 		return null;
 	}
 
+	@Override
+	public Mono<String> updateMusic(Music music) {
+		return webClientBuilder.build().post()
+			.uri(buildMusicAdd())
+			.bodyValue(music)
+			.retrieve()
+			.onStatus(httpStatus -> !httpStatus.is2xxSuccessful(), ClientResponse::createException)
+			.bodyToMono(String.class);
+	}
+
 	private URI buildSearch(String artist) {
 		try {
 			return new URIBuilder()
@@ -63,6 +74,18 @@ public class ServerRequester implements Requester {
 				.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException("Bad search");
+		}
+	}
+
+	private URI buildMusicAdd() {
+		try {
+			return new URIBuilder()
+				.setScheme("http")
+				.setHost(host)
+				.setPath("/music")
+				.build();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Bad music");
 		}
 	}
 

@@ -89,6 +89,10 @@ public class MediaPlayerService {
 		play();
 	}
 
+	public Music getCurrentMusic() {
+		return currentMusic;
+	}
+
 	public void play() {
 		if (currentMediaPlayer != null) {
 			currentMediaPlayer.play();
