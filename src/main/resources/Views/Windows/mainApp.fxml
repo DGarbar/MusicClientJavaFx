@@ -15,8 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
+<?import org.controlsfx.glyphfont.Glyph?>
 
-<VBox fx:id="root" fillWidth="false" prefHeight="349.0" prefWidth="648.0" stylesheets="@../CSS/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dharbar.musicclient.controller.window.MainController">
+<VBox fx:id="root" fillWidth="false" prefHeight="304.0" prefWidth="648.0" stylesheets="@../CSS/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dharbar.musicclient.controller.window.MainController">
   <children>
     <MenuBar prefHeight="25.0" prefWidth="645.0" VBox.vgrow="NEVER">
       <menus>
@@ -33,7 +34,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane prefHeight="325.0" prefWidth="648.0">
+    <AnchorPane prefHeight="279.0" prefWidth="648.0">
       <children>
         <HBox id="msc-container" layoutX="4.0" layoutY="14.0" prefHeight="55.0" prefWidth="640.0">
           <children>
@@ -42,19 +43,25 @@
                 <Font name="Arial" size="16.0" />
               </font>
             </TextField>
-            <Button fx:id="playBtn" mnemonicParsing="false" onAction="#play" prefHeight="35.0" prefWidth="75.0" styleClass="glyph-button" text="Play">
+            <Button fx:id="playBtn" mnemonicParsing="false" onAction="#play" prefHeight="35.0" prefWidth="75.0" styleClass="glyph-button" text="">
+              <graphic>
+                <Glyph fontFamily="FontAwesome" icon="Play" styleClass="glyph-icon" />
+              </graphic>
             </Button>
-            <Button id="glyph-button" fx:id="nextBtn" alignment="CENTER" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="60.0" mnemonicParsing="false" onAction="#nextMsc" prefHeight="35.0" prefWidth="80.0" styleClass="glyph-button" text="Next">
+            <Button id="glyph-button" fx:id="nextBtn" alignment="CENTER" maxHeight="-Infinity" maxWidth="100.0" minHeight="-Infinity" minWidth="60.0" mnemonicParsing="false" onAction="#nextMsc" prefHeight="35.0" prefWidth="80.0" styleClass="glyph-button" text="">
               <rotationAxis>
                 <Point3D />
               </rotationAxis>
               <opaqueInsets>
                 <Insets />
               </opaqueInsets>
+              <graphic>
+                <Glyph fontFamily="FontAwesome" icon="FORWARD" styleClass="glyph-icon" />
+              </graphic>
             </Button>
           </children>
         </HBox>
-        <AnchorPane layoutY="65.0" prefHeight="256.0" prefWidth="648.0">
+        <AnchorPane layoutY="65.0" prefHeight="213.0" prefWidth="648.0">
           <children>
             <HBox id="msc-panel" layoutX="388.0" prefHeight="36.0" prefWidth="243.0">
               <children>
@@ -63,27 +70,26 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </ComboBox>
-                <Button graphicTextGap="2.0" mnemonicParsing="false" onAction="#searchAuthor" prefHeight="32.0" prefWidth="32.0" styleClass="glyph-button" text="S" textAlignment="CENTER" />
+                <Button graphicTextGap="2.0" mnemonicParsing="false" onAction="#searchAuthor" prefHeight="32.0" prefWidth="32.0" styleClass="glyph-button" text="" textAlignment="CENTER">
+                  <graphic>
+                    <Glyph fontFamily="FontAwesome" icon="SEARCH_PLUS" styleClass="glyph-icon" />
+                  </graphic>
+                </Button>
               </children>
             </HBox>
-            <VBox id="msc-card" layoutX="388.0" layoutY="56.0" prefHeight="183.0" prefWidth="243.0">
+            <VBox id="msc-card" layoutX="388.0" layoutY="56.0" prefHeight="145.0" prefWidth="243.0">
               <children>
                 <HBox prefHeight="46.0" prefWidth="222.0" VBox.vgrow="NEVER">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <TextArea fx:id="authorSearchTextArea" prefHeight="39.0" prefWidth="200.0" />
+                              <TextArea fx:id="authorSearchTextArea" prefHeight="39.0" prefWidth="200.0" promptText="Artist1, Artist2">
+                                 <HBox.margin>
+                                    <Insets left="12.0" right="12.0" />
+                                 </HBox.margin></TextArea>
                            </children>
                         </HBox>
-                <HBox alignment="CENTER" prefHeight="31.0" prefWidth="220.0" spacing="5.0" styleClass="tag-container,double-tag-container">
-                  <VBox.margin>
-                    <Insets />
-                  </VBox.margin>
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#searchAttributes" text="Button" />
-                           </children>
-                </HBox>
                 <HBox prefHeight="20.0" prefWidth="220.0" spacing="5.0" styleClass="tag-container,double-tag-container">
                   <VBox.margin>
                     <Insets />
@@ -93,11 +99,20 @@
                               <CheckComboBox fx:id="moodCheckComboBox" prefHeight="26.0" prefWidth="108.0" title="Mood" />
                            </children>
                 </HBox>
+                        <Button mnemonicParsing="false" onAction="#searchAttributes" prefHeight="22.0" prefWidth="227.0" styleClass="glyph-button" text="">
+                          <graphic>
+                            <Glyph fontFamily="FontAwesome" icon="SEARCH" styleClass="glyph-icon" />
+                          </graphic>
+                        </Button>
 <!--                        <CheckComboBox prefWidth="150.0"  />-->
               </children>
             </VBox>
-            <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutX="14.0" layoutY="12.0" onMouseClicked="#listClick" prefHeight="231.0" prefWidth="358.0" styleClass="msc-list" />
-                  <Button layoutX="321.0" layoutY="218.0" mnemonicParsing="false" onAction="#loadMore" text="Next" />
+            <ListView fx:id="listView" editable="true" fixedCellSize="35.0" layoutX="14.0" layoutY="12.0" onMouseClicked="#listClick" prefHeight="190.0" prefWidth="358.0" styleClass="msc-list" />
+                  <Button layoutX="339.0" layoutY="166.0" mnemonicParsing="false" onAction="#loadMore" prefHeight="26.0" prefWidth="32.0" styleClass="glyph-button" text="">
+                    <graphic>
+                      <Glyph fontFamily="FontAwesome" icon="ARROW_DOWN" styleClass="glyph-icon" />
+                    </graphic>
+                  </Button>
           </children>
           <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

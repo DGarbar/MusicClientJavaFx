@@ -17,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -58,8 +57,6 @@ public class MainController {
 	private Button playBtn;
 	@FXML
 	private ListView<Music> listView;
-	@FXML
-	private CheckBox bigAttitude, AThink, ASad, ALoud, AHate, canSleep, swing, move, classic;
 	@FXML
 	private CheckComboBox<Mood> moodCheckComboBox;
 	@FXML
@@ -144,8 +141,7 @@ public class MainController {
 	public void listClick() {
 		Music selectedItem = listView.getSelectionModel().getSelectedItem();
 
-		mediaPlayerService.play(selectedItem );
-		playBtn.setText("PAUSE");
+		mediaPlayerService.play(selectedItem);
 	}
 
 	private void chooseMusic(Music music) {
@@ -159,16 +155,10 @@ public class MainController {
 	public void play() {
 		if (mediaPlayerService.isPlaying()) {
 			mediaPlayerService.pause();
-			playBtn.setText("PLAY");
 		} else {
 			mediaPlayerService.play();
-			playBtn.setText("PAUSE");
 		}
 	}
-
-//	public void setMainApp(MainApp mainApp) {
-//		this.mainApp = mainApp;
-//	}
 
 	@FXML
 	public void searchAuthor() {

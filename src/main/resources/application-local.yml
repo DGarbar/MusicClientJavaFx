@@ -1,2 +1,3 @@
-server:
-  host: localhost:8080
+music-library:
+  server:
+   host: localhost:8080

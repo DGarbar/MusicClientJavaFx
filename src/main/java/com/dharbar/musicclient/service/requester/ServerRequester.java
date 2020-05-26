@@ -10,6 +10,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -22,7 +23,7 @@ public class ServerRequester implements Requester {
 	private ParameterizedTypeReference<List<String>> stringListType = new ParameterizedTypeReference<>() {
 	};
 
-	@Value("${server.host}")
+	@Value("${music-library.server.host}")
 	private String host;
 
 	public ServerRequester(WebClient.Builder webClientBuilder) {
@@ -33,6 +34,7 @@ public class ServerRequester implements Requester {
 	public Flux<Music> searchMusic(String search) {
 		return webClientBuilder.build().get()
 			.uri(buildMusic(search))
+			.accept(MediaType.APPLICATION_STREAM_JSON)
 			.retrieve()
 			.bodyToFlux(Music.class);
 	}
@@ -41,6 +43,7 @@ public class ServerRequester implements Requester {
 	public Mono<List<String>> searchArtists(String artist) {
 		return webClientBuilder.build().get()
 			.uri(buildSearch(artist))
+			.accept(MediaType.APPLICATION_STREAM_JSON)
 			.retrieve()
 			.bodyToMono(stringListType);
 	}

@@ -13,9 +13,8 @@ public class SceneConfig {
 	@Bean
 	public Scene mainScene(FxWeaver fxWeaver) {
 		Parent parent = fxWeaver.loadView(MainController.class);
-		return new Scene(parent, 640, 390);
+		return new Scene(parent, 640, 300);
 	}
-
 
 //
 //	@Bean

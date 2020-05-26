@@ -81,11 +81,11 @@
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1.0), 10, 0, 0, 0);
 }
 
-.button > .glyph-icon {
+.glyph-icon {
   -fx-fill: linear-gradient(-black 20%, derive(-color, 30%) 85%);
 }
 
-.button > .glyph-icon:hover {
+.glyph-icon:hover {
   -fx-effect: dropshadow(one-pass-box, -black, 1, 0, 0, 0);
 }
 
@@ -161,62 +161,6 @@
   radial-gradient(center 5% -30%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);
   /*-fx-background-insets: 0, 1, 1;*/
   -fx-effect: dropshadow(three-pass-box, derive(-color, 10%), 2, 0, 1, 1);
-}
-
-/*
- * **********
- * TABPANE
- * **********
- *
- */
-.tab-pane > .tab-header-area {
-  -fx-padding: 0, 0, 0, 0;
-  -fx-font-size: 13.0;
-}
-
-.tab-header-area > .tab-header-background {
-  /*-fx-background-color:-black, linear-gradient( -color 20%, white 100%);*/
-  /*-fx-opacity: 0.1;*/
-}
-
-.tab-pane > .tab-content-area {
-  /*-fx-background-color: linear-gradient(  derive(-color, 120%) 0%, -mbWhite 15%);*/
-  -fx-background-color: radial-gradient(center 50% -130%, radius 300%, -color 0%, -mbWhite 50%);
-  -fx-border-color: -gray;
-}
-
-.tab-pane > .tab-header-area > .headers-region > .tab:top {
-  -fx-padding: 4, 4, 4, 4;
-  -fx-focus-color: transparent;
-  -fx-background-color: -darkGray,
-  linear-gradient(-gray 0%, -mbWhite 60%, -superBrightGray 100%);
-}
-
-.tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
-  -fx-padding: 6, 0, 0, 0;
-  -fx-font-size: 14.0;
-  -fx-background-color: -darkGray,
-  linear-gradient(-gray 50%, white 100%),
-  radial-gradient(center 50% 313%, radius 300%, -color 0%, -mbWhite 80%);
-  /*radial-gradient(center 40% -50%, radius 200%, -superBrightGray 45%, rgba(230, 230, 230, 0) 50%);*/
-}
-
-/*
- * **********
- * CONTROL-BUTTON
- * **********
- *
- */
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button {
-  -fx-background-color: transparent;
-  /*-fx-padding: 5;*/
-  /*-fx-background-radius: 0 10 0 10;*/
-  /*-fx-background-color: -darkGray;*/
-}
-
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button > .arrow {
-  -fx-background-color: -color;
-  -fx-background-insets: -10 0 -1 -10, 0;
 }
 
 /*
