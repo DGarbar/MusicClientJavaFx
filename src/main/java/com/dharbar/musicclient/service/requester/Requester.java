@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface Requester {
 
-	Flux<Music> searchMusic(String search);
+	Flux<Music> searchMusicByArtist(String search);
 
 	Mono<List<String>> searchArtists(String artist);
 

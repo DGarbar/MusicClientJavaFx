@@ -10,6 +10,7 @@ public enum Genre {
 	ELECTRONIC("Electronic"),
 	FITNESS_AND_WORKOUT("Fitness & Workout"),
 	HIP_HOP_RAP("Hip-Hop/Rap"),
+	UNDERGROUND_RAP("Underground Rap"),
 	JAZZ("Jazz"),
 	K_POP("K-Pop"),
 	LATINO("Latino"),

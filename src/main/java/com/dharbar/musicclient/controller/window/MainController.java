@@ -9,6 +9,7 @@ import com.dharbar.musicclient.service.requester.dto.MusicAttributes;
 import com.dharbar.musicclient.service.subscriber.MusicSubscriber;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.IndexedCheckModel;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -60,9 +62,9 @@ public class MainController {
 	@FXML
 	private ListView<Music> listView;
 	@FXML
-	private CheckComboBox<Mood> moodCheckComboBox;
+	private CheckComboBox<String> moodCheckComboBox;
 	@FXML
-	private CheckComboBox<Genre> genreCheckComboBox;
+	private CheckComboBox<String> genreCheckComboBox;
 	@FXML
 	private ComboBox<String> authorSearch;
 	@FXML
@@ -107,7 +109,7 @@ public class MainController {
 			ObservableList<Music> listViewItems = listView.getItems();
 			listViewItems.clear();
 			String text = cell.getText();
-			Flux<Music> musicFlux = requester.searchMusic(text);
+			Flux<Music> musicFlux = requester.searchMusicByArtist(text);
 
 			subscribeAndFullList(musicFlux, listViewItems::add);
 		}
@@ -128,11 +130,15 @@ public class MainController {
 	}
 
 	private void initMoodComboBox() {
-		moodCheckComboBox.getItems().addAll(Mood.values());
+		List<String> moods = Arrays.stream(Mood.values()).map(Mood::getNormal)
+			.collect(Collectors.toList());
+		moodCheckComboBox.getItems().addAll(moods);
 	}
 
 	private void initGenreComboBox() {
-		genreCheckComboBox.getItems().addAll(Genre.values());
+		List<String> genres = Arrays.stream(Genre.values()).map(Genre::getNormal)
+			.collect(Collectors.toList());
+		genreCheckComboBox.getItems().addAll(genres);
 	}
 
 	private void initMediaPlayerService() {
@@ -143,14 +149,31 @@ public class MainController {
 	public void listClick() {
 		Music selectedItem = listView.getSelectionModel().getSelectedItem();
 
-		mediaPlayerService.play(selectedItem);
+		if (selectedItem != null) {
+			mediaPlayerService.play(selectedItem);
+		}
 	}
 
 	private void chooseMusic(Music music) {
 		musicField.textProperty()
 			.setValue(String.format("%s - %s", music.getArtist(), music.getSongName()));
+		musicField.end();
 
 		listView.getSelectionModel().select(music);
+
+		IndexedCheckModel<String> moodCheckModel = moodCheckComboBox.getCheckModel();
+		moodCheckModel.clearChecks();
+		List<String> tags = music.getTags();
+		if (tags != null) {
+			tags.forEach(moodCheckModel::check);
+		}
+
+		IndexedCheckModel<String> genreCheckModel = genreCheckComboBox.getCheckModel();
+		genreCheckModel.clearChecks();
+		List<String> genres = music.getGenres();
+		if (genres != null) {
+			genres.forEach(genreCheckModel::check);
+		}
 	}
 
 	@FXML
@@ -178,20 +201,14 @@ public class MainController {
 	public void updateAttributes() {
 		Music currentMusic = mediaPlayerService.getCurrentMusic();
 		if (currentMusic != null) {
-			List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems().stream()
-				.map(Genre::getNormal)
-				.collect(Collectors.toList());
+			List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems();
 
-			List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems().stream()
-				.map(Mood::getNormal)
-				.collect(Collectors.toList());
+			List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems();
 
-			Music updatedMusic = currentMusic.toBuilder()
-				.tags(tags)
-				.genres(genres)
-				.build();
+			currentMusic.setTags(tags);
+			currentMusic.setGenres(genres);
 
-			requester.updateMusic(updatedMusic)
+			requester.updateMusic(currentMusic)
 				.doOnError(throwable -> log.error(throwable.getMessage(), throwable))
 				.subscribe();
 		}
@@ -200,16 +217,15 @@ public class MainController {
 	@FXML
 	public void searchAttributes() {
 		String text = authorSearchTextArea.getText();
-		List<String> artists = Arrays.asList(StringUtils.stripToEmpty(text).split(", "));
-		List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems().stream()
-			.map(Enum::toString)
-			.collect(Collectors.toList());
-		List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems().stream()
-			.map(Enum::toString)
-			.collect(Collectors.toList());
+		List<String> artists = StringUtils.isBlank(text)
+			? Collections.emptyList()
+			: Arrays.asList(StringUtils.stripToEmpty(text).split(", "));
+		List<String> tags = moodCheckComboBox.getCheckModel().getCheckedItems();
+		List<String> genres = genreCheckComboBox.getCheckModel().getCheckedItems();
 
-		if (!(CollectionUtils.isEmpty(artists) && CollectionUtils.isEmpty(tags) && CollectionUtils
-			.isEmpty(genres))) {
+		if (!(CollectionUtils.isEmpty(artists)
+			&& CollectionUtils.isEmpty(tags)
+			&& CollectionUtils.isEmpty(genres))) {
 			ObservableList<Music> listViewItems = listView.getItems();
 			listViewItems.clear();
 			Flux<Music> musicFlux = requester

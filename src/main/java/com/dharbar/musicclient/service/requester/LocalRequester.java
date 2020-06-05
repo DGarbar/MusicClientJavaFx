@@ -18,7 +18,7 @@ public class LocalRequester implements Requester {
 	private ObjectMapper mapper;
 
 	@Override
-	public Flux<Music> searchMusic(String search) {
+	public Flux<Music> searchMusicByArtist(String search) {
 		return Flux.just(
 			Music.builder()
 				.artist("test")

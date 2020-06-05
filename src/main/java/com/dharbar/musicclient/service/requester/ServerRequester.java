@@ -32,9 +32,9 @@ public class ServerRequester implements Requester {
 	}
 
 	@Override
-	public Flux<Music> searchMusic(String search) {
+	public Flux<Music> searchMusicByArtist(String search) {
 		return webClientBuilder.build().get()
-			.uri(buildMusic(search))
+			.uri(buildSearchMusicByAuthor(search))
 			.accept(MediaType.APPLICATION_STREAM_JSON)
 			.retrieve()
 			.bodyToFlux(Music.class);
@@ -43,7 +43,7 @@ public class ServerRequester implements Requester {
 	@Override
 	public Mono<List<String>> searchArtists(String artist) {
 		return webClientBuilder.build().get()
-			.uri(buildSearch(artist))
+			.uri(buildSearchArtist(artist))
 			.accept(MediaType.APPLICATION_STREAM_JSON)
 			.retrieve()
 			.bodyToMono(stringListType);
@@ -51,7 +51,12 @@ public class ServerRequester implements Requester {
 
 	@Override
 	public Flux<Music> searchByAttributes(MusicAttributes musicAttributes) {
-		return null;
+		return webClientBuilder.build().post()
+			.uri(buildSearchMusicAttributes())
+			.accept(MediaType.APPLICATION_STREAM_JSON)
+			.bodyValue(musicAttributes)
+			.retrieve()
+			.bodyToFlux(Music.class);
 	}
 
 	@Override
@@ -64,7 +69,19 @@ public class ServerRequester implements Requester {
 			.bodyToMono(String.class);
 	}
 
-	private URI buildSearch(String artist) {
+	private URI buildSearchMusicAttributes() {
+		try {
+			return new URIBuilder()
+				.setScheme("http")
+				.setHost(host)
+				.setPath("/pref/music")
+				.build();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("Bad search");
+		}
+	}
+
+	private URI buildSearchArtist(String artist) {
 		try {
 			return new URIBuilder()
 				.setScheme("http")
@@ -82,14 +99,14 @@ public class ServerRequester implements Requester {
 			return new URIBuilder()
 				.setScheme("http")
 				.setHost(host)
-				.setPath("/music")
+				.setPath("/pref/new")
 				.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException("Bad music");
 		}
 	}
 
-	private URI buildMusic(String search) {
+	private URI buildSearchMusicByAuthor(String search) {
 		try {
 			return new URIBuilder()
 				.setScheme("http")
