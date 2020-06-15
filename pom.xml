@@ -19,7 +19,7 @@
     <java.version>11</java.version>
 
     <org.apache.httpcomponents.httpclient.version>4.5.10</org.apache.httpcomponents.httpclient.version>
-    <commons-collections.version>3.2.1</commons-collections.version>
+    <commons-collections.version>3.2.2</commons-collections.version>
 
     <!-- plugin versions -->
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
